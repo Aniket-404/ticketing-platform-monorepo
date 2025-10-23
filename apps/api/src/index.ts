@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import seedRouter from './routes/seed';
 
 // Load environment variables
 dotenv.config();
@@ -29,12 +30,16 @@ app.get('/', (_req: Request, res: Response) => {
     version: '1.0.0',
     endpoints: {
       health: '/health',
+      seed: '/api/seed (POST)',
       events: '/api/events',
       bookings: '/api/bookings',
       analytics: '/api/analytics'
     }
   });
 });
+
+// API routes
+app.use('/api/seed', seedRouter);
 
 // Placeholder API routes
 app.get('/api/events', (_req: Request, res: Response) => {
