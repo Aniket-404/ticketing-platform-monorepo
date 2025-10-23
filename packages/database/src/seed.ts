@@ -1,5 +1,5 @@
-import { db } from "./index";
-import { events } from "./schema";
+import { db } from "./index.js";
+import { events, type Event } from "./schema.js";
 
 async function seed() {
   console.log("Seeding database...");
@@ -99,7 +99,7 @@ async function seed() {
 
     console.log(`Successfully seeded ${insertedEvents.length} events`);
     console.log("\nSeeded Events:");
-    insertedEvents.forEach((event) => {
+    insertedEvents.forEach((event: Event) => {
       console.log(`  - ${event.name} (${event.totalTickets} tickets at $${event.basePrice})`);
     });
 

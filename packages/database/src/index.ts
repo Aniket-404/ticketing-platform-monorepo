@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import * as schema from "./schema";
+import * as schema from "./schema.js";
 
 // Load environment variables from .env file
 config();
@@ -29,7 +29,7 @@ export const db = drizzle(queryClient, { schema });
 export const migrationDb = drizzle(migrationClient, { schema });
 
 // Export schema for use in other packages
-export * from "./schema";
+export * from "./schema.js";
 
 // Export types
 export type Database = typeof db;
