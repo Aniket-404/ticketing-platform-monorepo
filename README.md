@@ -255,3 +255,97 @@ To keep the scope reasonable for 7 days, you do **not** need to implement:
 - No seat selection or ticket tiers
 
 Focus on the core challenges: dynamic pricing algorithm and concurrency control. Everything else should be kept minimal.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and pnpm
+- Docker and Docker Compose (for PostgreSQL)
+- Git
+
+### Installation
+
+1. Clone the repository and install dependencies:
+```bash
+git clone <your-repo-url>
+cd ticketing-platform-monorepo
+pnpm install
+```
+
+2. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env if you need to customize database credentials
+```
+
+3. Start PostgreSQL using Docker:
+```bash
+docker-compose up -d
+```
+
+4. Verify the database is running:
+```bash
+docker-compose ps
+# The postgres container should show as "Up" with healthy status
+```
+
+5. Run database migrations (after completing database package setup):
+```bash
+pnpm --filter @repo/database db:migrate
+```
+
+6. Seed the database with sample data:
+```bash
+pnpm --filter @repo/database db:seed
+```
+
+7. Start the development servers:
+```bash
+pnpm dev
+```
+
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:4000
+
+### Database Management
+
+**Start PostgreSQL:**
+```bash
+docker-compose up -d
+```
+
+**Stop PostgreSQL:**
+```bash
+docker-compose down
+```
+
+**Stop and remove all data:**
+```bash
+docker-compose down -v
+```
+
+**View PostgreSQL logs:**
+```bash
+docker-compose logs -f postgres
+```
+
+**Connect to PostgreSQL CLI:**
+```bash
+docker exec -it ticketing-platform-db psql -U ticketing_user -d ticketing_platform
+```
+
+### Environment Variables
+
+Key environment variables (see `.env.example` for full list):
+
+- `DATABASE_URL`: PostgreSQL connection string
+- `POSTGRES_USER`: Database user
+- `POSTGRES_PASSWORD`: Database password
+- `POSTGRES_DB`: Database name
+- `POSTGRES_PORT`: PostgreSQL port (default: 5432)
+- `NODE_ENV`: Application environment (development/production)
+- `PORT`: Backend API port (default: 4000)
+
+````
