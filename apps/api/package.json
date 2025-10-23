@@ -12,8 +12,10 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/database": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.36.4",
     "express": "^4.21.2"
   },
   "devDependencies": {
