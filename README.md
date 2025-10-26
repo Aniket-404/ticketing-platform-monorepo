@@ -165,7 +165,7 @@ docker exec -it ticketing-platform-db psql -U ticketing_user -d ticketing_platfo
 **Port already in use:**
 ```bash
 # Kill processes on specific ports
-pnpm kill:ports
+pnpm dev:clean
 ```
 
 **Database connection issues:**
