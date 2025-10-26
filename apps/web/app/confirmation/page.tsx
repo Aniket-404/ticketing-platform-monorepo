@@ -19,6 +19,7 @@ interface BookingDetails {
   pricePaid: string;
   totalAmount: string;
   bookedAt: string;
+  currentEventPrice?: string;
 }
 
 async function fetchBookingById(id: string): Promise<BookingDetails | null> {
@@ -34,7 +35,24 @@ async function fetchBookingById(id: string): Promise<BookingDetails | null> {
 
     const data = await response.json();
     if (data.success && data.data) {
-      return data.data;
+      const booking = data.data;
+      
+      // Fetch current event price
+      try {
+        const eventResponse = await fetch(`${API_BASE_URL}/api/events/${booking.eventId}`, {
+          cache: 'no-store',
+        });
+        if (eventResponse.ok) {
+          const eventData = await eventResponse.json();
+          if (eventData.success && eventData.data) {
+            booking.currentEventPrice = eventData.data.currentPrice;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching current event price:', error);
+      }
+      
+      return booking;
     }
     return null;
   } catch (error) {
@@ -185,6 +203,34 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
                   <span className="text-lg font-medium text-slate-100">Total Amount Paid:</span>
                   <span className="text-2xl font-bold text-green-400">${parseFloat(booking.totalAmount).toFixed(2)}</span>
                 </div>
+                
+                {/* Price Comparison */}
+                {booking.currentEventPrice && (
+                  <>
+                    <div className="border-t border-slate-700/50 pt-3 mt-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-300">Current Ticket Price:</span>
+                        <span className="text-slate-100 font-medium">${parseFloat(booking.currentEventPrice).toFixed(2)}</span>
+                      </div>
+                      <div className="mt-2 flex justify-between items-center">
+                        <span className="text-slate-400 text-sm">Price Difference:</span>
+                        {(() => {
+                          const priceDiff = parseFloat(booking.currentEventPrice) - parseFloat(booking.pricePaid);
+                          const isMoreExpensiveNow = priceDiff > 0;
+                          return (
+                            <span className={`font-medium ${isMoreExpensiveNow ? 'text-green-400' : 'text-red-400'}`}>
+                              {isMoreExpensiveNow ? (
+                                <>You saved ${Math.abs(priceDiff).toFixed(2)} per ticket! 🎉</>
+                              ) : (
+                                <>Price dropped by ${Math.abs(priceDiff).toFixed(2)} per ticket</>
+                              )}
+                            </span>
+                          );
+                        })()}
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 

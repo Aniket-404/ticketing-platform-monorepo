@@ -176,9 +176,59 @@ export default async function EventDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
+              {/* Price Breakdown */}
+              <div className="mb-6">
+                <p className="text-sm text-slate-400 mb-3">Price Breakdown</p>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center py-2 border-b border-slate-700/30">
+                    <span className="text-slate-300">Base Price</span>
+                    <span className="font-medium text-slate-200">${parseFloat(event.basePrice).toFixed(2)}</span>
+                  </div>
+                  
+                  {event.pricingRules && (
+                    <>
+                      <div className="flex justify-between items-center py-2 border-b border-slate-700/30">
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-300">Time-based Adjustment</span>
+                          <span className="text-xs text-slate-500">({(event.pricingRules.timeBasedWeight * 100).toFixed(0)}% weight)</span>
+                        </div>
+                        <span className="text-orange-400 font-medium">
+                          Varies by date proximity
+                        </span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center py-2 border-b border-slate-700/30">
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-300">Demand-based Adjustment</span>
+                          <span className="text-xs text-slate-500">({(event.pricingRules.demandBasedWeight * 100).toFixed(0)}% weight)</span>
+                        </div>
+                        <span className="text-purple-400 font-medium">
+                          Based on booking velocity
+                        </span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center py-2 border-b border-slate-700/30">
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-300">Inventory-based Adjustment</span>
+                          <span className="text-xs text-slate-500">({(event.pricingRules.inventoryBasedWeight * 100).toFixed(0)}% weight)</span>
+                        </div>
+                        <span className="text-red-400 font-medium">
+                          {((1 - event.availableTickets / event.totalTickets) * 100).toFixed(0)}% sold
+                        </span>
+                      </div>
+                    </>
+                  )}
+                  
+                  <div className="flex justify-between items-center pt-3">
+                    <span className="text-base font-medium text-slate-100">Current Price</span>
+                    <span className="text-xl font-bold text-blue-400">${parseFloat(event.currentPrice).toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+
               {event.pricingRules && (
                 <div>
-                  <p className="text-sm text-slate-400 mb-3">Pricing Factors</p>
+                  <p className="text-sm text-slate-400 mb-3">Pricing Factor Weights</p>
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div className="bg-slate-800/50 rounded p-3">
                       <p className="text-slate-400 mb-1">Time-based</p>
@@ -203,7 +253,7 @@ export default async function EventDetailPage({ params }: PageProps) {
               )}
 
               <div className="mt-4 p-3 bg-blue-900/20 border border-blue-700/30 rounded text-sm text-blue-300">
-                <p>💡 Prices update dynamically based on demand, time until event, and remaining tickets.</p>
+                <p>💡 Prices update dynamically every 30 seconds based on demand, time until event, and remaining tickets.</p>
               </div>
             </div>
 

@@ -22,6 +22,17 @@ export interface EventDetail extends Event {
     demandBasedWeight: number;
     inventoryBasedWeight: number;
   };
+  priceBreakdown?: {
+    basePrice: number;
+    timeFactor: number;
+    demandFactor: number;
+    inventoryFactor: number;
+    timeAdjustment: number;
+    demandAdjustment: number;
+    inventoryAdjustment: number;
+    totalAdjustment: number;
+    finalPrice: number;
+  };
   isActive: boolean;
   updatedAt: string;
 }

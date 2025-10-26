@@ -14,6 +14,7 @@ interface UserBooking {
   pricePaid: string;
   totalAmount: string;
   bookedAt: string;
+  currentEventPrice?: string;
 }
 
 export default function MyBookingsClient() {
@@ -46,7 +47,30 @@ export default function MyBookingsClient() {
 
       const data = await response.json();
       if (data.success && data.data) {
-        setBookings(data.data);
+        const bookingsData = data.data;
+        
+        // Fetch current prices for all events
+        const bookingsWithCurrentPrices = await Promise.all(
+          bookingsData.map(async (booking: UserBooking) => {
+            try {
+              const eventResponse = await fetch(
+                `${API_BASE_URL}/api/events/${booking.eventId}`,
+                { cache: 'no-store' }
+              );
+              if (eventResponse.ok) {
+                const eventData = await eventResponse.json();
+                if (eventData.success && eventData.data) {
+                  booking.currentEventPrice = eventData.data.currentPrice;
+                }
+              }
+            } catch (error) {
+              console.error(`Error fetching current price for event ${booking.eventId}:`, error);
+            }
+            return booking;
+          })
+        );
+        
+        setBookings(bookingsWithCurrentPrices);
       } else {
         setBookings([]);
       }
@@ -233,7 +257,7 @@ export default function MyBookingsClient() {
                         </div>
 
                         <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
-                          <div>
+                          <div className="flex-1">
                             <p className="text-xs text-slate-400 mb-1">Total Paid</p>
                             <p className="text-2xl font-semibold text-green-400">
                               ${parseFloat(booking.totalAmount).toFixed(2)}
@@ -241,6 +265,27 @@ export default function MyBookingsClient() {
                             <p className="text-xs text-slate-500 mt-1">
                               ${parseFloat(booking.pricePaid).toFixed(2)} per ticket
                             </p>
+                            
+                            {/* Price Comparison */}
+                            {booking.currentEventPrice && (
+                              <div className="mt-3 p-2 bg-slate-900/50 rounded border border-slate-700/30">
+                                <p className="text-xs text-slate-400 mb-1">Current Price: ${parseFloat(booking.currentEventPrice).toFixed(2)}</p>
+                                {(() => {
+                                  const priceDiff = parseFloat(booking.currentEventPrice) - parseFloat(booking.pricePaid);
+                                  const isMoreExpensiveNow = priceDiff > 0;
+                                  const totalDiff = priceDiff * booking.quantity;
+                                  return (
+                                    <p className={`text-xs font-medium ${isMoreExpensiveNow ? 'text-green-400' : 'text-red-400'}`}>
+                                      {isMoreExpensiveNow ? (
+                                        <>✓ You saved ${Math.abs(totalDiff).toFixed(2)} total!</>
+                                      ) : (
+                                        <>Price dropped ${Math.abs(totalDiff).toFixed(2)} since booking</>
+                                      )}
+                                    </p>
+                                  );
+                                })()}
+                              </div>
+                            )}
                           </div>
                           <div className="flex gap-3">
                             <Link
