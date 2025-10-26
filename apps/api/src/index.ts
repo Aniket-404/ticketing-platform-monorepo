@@ -5,6 +5,7 @@ import seedRouter from './routes/seed';
 import eventsRouter from './routes/events';
 import bookingsRouter from './routes/bookings';
 import analyticsRouter from './routes/analytics';
+import migrateRouter from './routes/migrate';
 
 // Load environment variables
 dotenv.config();
@@ -47,7 +48,10 @@ app.get('/', (_req: Request, res: Response) => {
         eventStats: 'GET /api/analytics/events/:id',
         summary: 'GET /api/analytics/summary',
       },
-      seed: 'POST /api/seed',
+      setup: {
+        migrate: 'POST /api/migrate (run once after deployment)',
+        seed: 'POST /api/seed',
+      },
     }
   });
 });
@@ -57,6 +61,7 @@ app.use('/api/seed', seedRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/analytics', analyticsRouter);
+app.use('/api/migrate', migrateRouter);
 
 // Remove placeholder routes
 // (Events, bookings, and analytics are now handled by dedicated routers)
