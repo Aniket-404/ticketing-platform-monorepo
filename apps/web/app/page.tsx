@@ -72,53 +72,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-8 hover:bg-slate-800/60 transition-all duration-300">
-            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-6">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-slate-100 mb-3">
-              Dynamic Pricing
-            </h3>
-            <p className="text-slate-400 leading-relaxed">
-              Smart pricing that adapts to demand, time, and availability for the best value
-            </p>
-          </div>
-
-          <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-8 hover:bg-slate-800/60 transition-all duration-300">
-            <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-6">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-slate-100 mb-3">
-              Real-Time Updates
-            </h3>
-            <p className="text-slate-400 leading-relaxed">
-              Live availability tracking and instant price updates as you browse
-            </p>
-          </div>
-
-          <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-8 hover:bg-slate-800/60 transition-all duration-300">
-            <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center mb-6">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-slate-100 mb-3">
-              Instant Confirmation
-            </h3>
-            <p className="text-slate-400 leading-relaxed">
-              Secure your spot immediately with instant booking confirmation
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Featured Events Section */}
       {!hasError && featuredEvents.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 py-16">
@@ -150,33 +103,6 @@ export default async function Home() {
         </section>
       )}
 
-      {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-12 md:p-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Experience Something Amazing?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of event-goers finding and booking their perfect events
-          </p>
-          <Link 
-            href="/events" 
-            className="inline-block px-8 py-4 bg-white text-purple-600 font-bold rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-          >
-            Start Exploring Events
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-700/50 bg-slate-900/50 mt-20">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="text-center text-slate-400">
-            <p className="mb-2">© 2025 EventHub - Dynamic Event Ticketing Platform</p>
-            <p className="text-sm">Powered by intelligent pricing algorithms</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
