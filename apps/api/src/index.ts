@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import eventsRouter from './routes/events';
-import bookingsRouter from './routes/bookings';
-import analyticsRouter from './routes/analytics';
-import migrateRouter from './routes/migrate';
+import eventsRouter from './routes/events.js';
+import bookingsRouter from './routes/bookings.js';
+import analyticsRouter from './routes/analytics.js';
+import migrateRouter from './routes/migrate.js';
 
 // Load environment variables
 dotenv.config();

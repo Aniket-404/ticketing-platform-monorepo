@@ -1,13 +1,13 @@
 import { Router, Request, Response } from 'express';
 import { db, events, bookings, type Event, type NewEvent } from '@repo/database';
 import { eq, sql, gte, and } from 'drizzle-orm';
-import { requireApiKey } from '../middleware/auth';
+import { requireApiKey } from '../middleware/auth.js';
 import { 
   calculateDynamicPrice, 
   calculateDemandFactor, 
   calculateTimeFactor, 
   calculateInventoryFactor 
-} from '../utils/pricing';
+} from '../utils/pricing.js';
 
 const router: Router = Router();
 

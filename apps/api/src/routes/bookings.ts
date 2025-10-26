@@ -6,7 +6,7 @@ import {
   calculateDemandFactor, 
   calculateTimeFactor, 
   calculateInventoryFactor 
-} from '../utils/pricing';
+} from '../utils/pricing.js';
 
 const router: Router = Router();
 
