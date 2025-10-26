@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import seedRouter from './routes/seed';
 import eventsRouter from './routes/events';
 import bookingsRouter from './routes/bookings';
 import analyticsRouter from './routes/analytics';
@@ -50,14 +49,12 @@ app.get('/', (_req: Request, res: Response) => {
       },
       setup: {
         migrate: 'POST /api/migrate (run once after deployment)',
-        seed: 'POST /api/seed',
       },
     }
   });
 });
 
 // API routes
-app.use('/api/seed', seedRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/analytics', analyticsRouter);
