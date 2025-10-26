@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { db, events, bookings, type Event, type NewEvent } from '@repo/database';
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, gte, and } from 'drizzle-orm';
 import { requireApiKey } from '../middleware/auth';
 import { 
   calculateDynamicPrice, 
@@ -30,7 +30,10 @@ async function calculateEventPrice(event: Event): Promise<string> {
     .select({ count: sql<number>`count(*)::int` })
     .from(bookings)
     .where(
-      sql`${bookings.eventId} = ${event.id} AND ${bookings.createdAt} >= ${oneDayAgo}`
+      and(
+        eq(bookings.eventId, event.id),
+        gte(bookings.createdAt, oneDayAgo)
+      )
     );
   
   const recentBookings = recentBookingsResult[0]?.count || 0;

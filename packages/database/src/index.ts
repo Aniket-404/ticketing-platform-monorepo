@@ -7,10 +7,17 @@ import * as schema from "./schema.js";
 config();
 
 // Load environment variables
-const connectionString = process.env.DATABASE_URL;
+const databaseUrl = process.env.DATABASE_URL;
 
-if (!connectionString) {
+if (!databaseUrl) {
   throw new Error("DATABASE_URL environment variable is not set");
+}
+
+// Ensure the connection string is a string (not Buffer or undefined)
+const connectionString = String(databaseUrl).trim();
+
+if (!connectionString || connectionString === 'undefined') {
+  throw new Error("DATABASE_URL is invalid or empty");
 }
 
 // Create PostgreSQL connection with pooling
