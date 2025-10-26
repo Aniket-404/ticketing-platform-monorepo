@@ -1,8 +1,68 @@
 import { Router, Request, Response } from 'express';
-import { db, events, bookings, type NewBooking } from '@repo/database';
+import { db, events, bookings, type NewBooking, type Event } from '@repo/database';
 import { eq, sql, and, gte } from 'drizzle-orm';
+import { 
+  calculateDynamicPrice, 
+  calculateDemandFactor, 
+  calculateTimeFactor, 
+  calculateInventoryFactor 
+} from '../utils/pricing';
 
 const router: Router = Router();
+
+/**
+ * Helper function to calculate dynamic price for an event
+ */
+async function calculateEventPrice(event: Event): Promise<number> {
+  // Calculate days until event
+  const now = new Date();
+  const eventDate = new Date(event.date);
+  const daysUntilEvent = Math.ceil((eventDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Calculate total planning period (assume 90 days from creation)
+  const createdDate = new Date(event.createdAt);
+  const totalDays = Math.ceil((eventDate.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Get recent bookings count (last 24 hours)
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const recentBookingsResult = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(bookings)
+    .where(
+      and(
+        eq(bookings.eventId, event.id),
+        gte(bookings.createdAt, oneDayAgo)
+      )
+    );
+  
+  const recentBookings = recentBookingsResult[0]?.count || 0;
+  
+  // Calculate remaining capacity
+  const remainingCapacity = event.totalTickets - event.bookedTickets;
+  
+  // Calculate pricing factors
+  const demandFactor = calculateDemandFactor(recentBookings, 50); // Assume max 50 bookings per day
+  const timeFactor = daysUntilEvent > 0 ? calculateTimeFactor(daysUntilEvent, totalDays) : 1;
+  const inventoryFactor = calculateInventoryFactor(remainingCapacity, event.totalTickets);
+  
+  // Calculate dynamic price
+  const basePrice = parseFloat(event.basePrice);
+  const dynamicPrice = calculateDynamicPrice({
+    basePrice,
+    factors: {
+      demandFactor,
+      timeFactor,
+      inventoryFactor,
+    },
+  });
+  
+  // Apply floor and ceiling constraints
+  const priceFloor = parseFloat(event.priceFloor);
+  const priceCeiling = parseFloat(event.priceCeiling);
+  const finalPrice = Math.max(priceFloor, Math.min(priceCeiling, dynamicPrice));
+  
+  return finalPrice;
+}
 
 /**
  * POST /api/bookings
@@ -74,8 +134,8 @@ router.post('/', async (req: Request, res: Response) => {
         throw new Error('INSUFFICIENT_TICKETS');
       }
       
-      // Calculate price at booking time (snapshot)
-      const pricePaid = parseFloat(event.currentPrice);
+      // Calculate dynamic price at booking time (snapshot)
+      const pricePaid = await calculateEventPrice(event);
       const totalAmount = pricePaid * quantity;
       
       // Create booking
