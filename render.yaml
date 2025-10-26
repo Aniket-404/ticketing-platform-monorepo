@@ -35,7 +35,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_API_URL
-        value: https://ticketing-api.onrender.com
+        value: https://ticketing-api-u3bk.onrender.com
 
 databases:
   - name: ticketing-db
