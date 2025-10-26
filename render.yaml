@@ -5,7 +5,7 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: pnpm install && pnpm --filter api build
+    buildCommand: pnpm install --prod=false && pnpm --filter @repo/database build && pnpm --filter api build
     startCommand: cd apps/api && node dist/index.js
     envVars:
       - key: NODE_ENV
@@ -29,7 +29,7 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: pnpm install && pnpm --filter web build
+    buildCommand: pnpm install --prod=false && pnpm --filter web build
     startCommand: cd apps/web && pnpm start
     envVars:
       - key: NODE_ENV
