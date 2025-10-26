@@ -1,0 +1,45 @@
+services:
+  # Backend API
+  - type: web
+    name: ticketing-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: pnpm install && pnpm --filter api build
+    startCommand: cd apps/api && node dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ticketing-db
+          property: connectionString
+      - key: PRICING_WEIGHT_DEMAND
+        value: 0.3
+      - key: PRICING_WEIGHT_TIME
+        value: 0.2
+      - key: PRICING_WEIGHT_INVENTORY
+        value: 0.5
+    
+  # Frontend Web App
+  - type: web
+    name: ticketing-web
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: pnpm install && pnpm --filter web build
+    startCommand: cd apps/web && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://ticketing-api.onrender.com
+
+databases:
+  - name: ticketing-db
+    databaseName: ticketing_platform
+    user: ticketing_user
+    plan: free
+    region: oregon

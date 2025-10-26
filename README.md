@@ -188,4 +188,21 @@ pnpm kill:ports
 ✅ Comprehensive test coverage  
 ✅ Monorepo architecture with shared packages
 
+## Deployment
+
+This project is ready for deployment on Render. See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
+
+### Quick Deploy to Render
+
+1. Push your code to GitHub
+2. Connect your repo to Render
+3. Render will auto-detect the `render.yaml` configuration
+4. Click "Apply" to deploy all services (API, Web, Database)
+
+The deployment includes:
+- PostgreSQL database (free tier)
+- Backend API with health checks
+- Frontend Next.js application
+- Auto-configured environment variables
+
 ````
