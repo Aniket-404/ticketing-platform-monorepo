@@ -65,6 +65,17 @@ export default async function EventDetailPage({ params }: PageProps) {
               <Link href="/my-bookings" className="text-slate-400 hover:text-slate-100 transition-colors">
                 My Bookings
               </Link>
+              <a 
+                href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/analytics/summary`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-slate-100 transition-colors inline-flex items-center gap-1"
+              >
+                Analytics
+                <svg className="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </nav>
           </div>
         </div>
@@ -280,6 +291,24 @@ export default async function EventDetailPage({ params }: PageProps) {
               >
                 Back to Events
               </Link>
+            </div>
+
+            {/* Analytics Link */}
+            <div className="mt-6 pt-6 border-t border-slate-700/50">
+              <a
+                href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/analytics/events/${event.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors text-sm group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span>View Event Analytics</span>
+                <svg className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>

@@ -4,22 +4,21 @@
   "private": true,
   "license": "MIT",
   "author": {
-    "name": "Minsky Digital Labs",
-    "email": "reneeth@minsky.in",
-    "url": "https://minsky.in"
+    "name": "Aniket Kamble",
+    "email": "kamble.aniket.ak47@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/ticketing-platform-monorepo"
+    "url": "https://github.com/Aniket-404/ticketing-platform-monorepo"
   },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "dev:clean": "pnpm kill:ports && pnpm dev",
+    "test": "turbo run test",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "kill:4000": "powershell -File kill-port-4000.ps1",
     "kill:ports": "kill-port 4000 3000"
   },
   "devDependencies": {

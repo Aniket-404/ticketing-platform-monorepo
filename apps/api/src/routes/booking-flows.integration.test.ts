@@ -51,6 +51,7 @@ jest.mock('@repo/database', () => ({
 jest.mock('drizzle-orm', () => ({
   eq: jest.fn((_field, value) => ({ field: _field, value })),
   and: jest.fn((...conditions) => ({ type: 'and', conditions })),
+  gte: jest.fn((_field, value) => ({ field: _field, value })),
   sql: jest.fn((strings, ...values) => ({ strings, values })),
   sum: jest.fn(() => 'sum'),
   avg: jest.fn(() => 'avg'),

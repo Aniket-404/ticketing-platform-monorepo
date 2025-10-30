@@ -10,35 +10,45 @@ import bookingsRouter from './bookings';
 import { db } from '@repo/database';
 
 // Mock the database module
-jest.mock('@repo/database', () => ({
-  db: {
-    transaction: jest.fn(),
-    select: jest.fn(),
-    insert: jest.fn(),
-    update: jest.fn(),
-  },
-  events: {
-    id: 'id',
-    name: 'name',
-    description: 'description',
-    date: 'date',
-    venue: 'venue',
-    totalTickets: 'totalTickets',
-    bookedTickets: 'bookedTickets',
-    currentPrice: 'currentPrice',
-    isActive: 'isActive',
-    updatedAt: 'updatedAt',
-  },
-  bookings: {
-    id: 'id',
-    eventId: 'eventId',
-    userEmail: 'userEmail',
-    quantity: 'quantity',
-    pricePaid: 'pricePaid',
-    totalAmount: 'totalAmount',
-    createdAt: 'createdAt',
-  },
-}));
+jest.mock('@repo/database', () => {
+  const mockWhere = jest.fn().mockResolvedValue([{ count: 0 }]);
+  const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
+  const mockSelect = jest.fn().mockReturnValue({ from: mockFrom });
+  
+  return {
+    db: {
+      transaction: jest.fn(),
+      select: mockSelect,
+      insert: jest.fn(),
+      update: jest.fn(),
+    },
+    events: {
+      id: 'id',
+      name: 'name',
+      description: 'description',
+      date: 'date',
+      venue: 'venue',
+      totalTickets: 'totalTickets',
+      bookedTickets: 'bookedTickets',
+      basePrice: 'basePrice',
+      currentPrice: 'currentPrice',
+      priceFloor: 'priceFloor',
+      priceCeiling: 'priceCeiling',
+      isActive: 'isActive',
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+    },
+    bookings: {
+      id: 'id',
+      eventId: 'eventId',
+      userEmail: 'userEmail',
+      quantity: 'quantity',
+      pricePaid: 'pricePaid',
+      totalAmount: 'totalAmount',
+      createdAt: 'createdAt',
+    },
+  };
+});
 
 // Mock drizzle-orm functions
 jest.mock('drizzle-orm', () => ({
